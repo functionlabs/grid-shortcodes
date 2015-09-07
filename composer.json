@@ -1,0 +1,11 @@
+{
+  "name": "functionlabs/grid-shortcodes",
+  "type": "wordpress-plugin",
+  "description": "Provides WordPress shortcodes for Bootstrap 3 grid system",
+  "keywords": [
+    "wordpress",
+    "shortcode",
+    "grid",
+    "bootstrap"
+  ]
+}
