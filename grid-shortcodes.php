@@ -16,6 +16,10 @@ class Grid_Shortcodes {
 	static $default_atts = array(
 		'id'    => '',
 		'class' => '',
+		'lg_offset' => '',
+		'md_offset' => '',
+		'sm_offset' => '',
+		'xs_offset' => ''
 	);
 
 	static function init() {
@@ -80,7 +84,7 @@ class Grid_Shortcodes {
 	static function grid_shortcodes( $atts, $content, $tag ) {
 		extract( shortcode_atts( self::$default_atts, $atts) );
 
-		$grid_class = self::get_grid_class( $tag );
+		$grid_class = self::get_grid_class( $tag, $atts );
 		$content = self::$autopfix . trim( $content );
 
 		$classes = array( $grid_class );
@@ -95,8 +99,20 @@ class Grid_Shortcodes {
 		return $grid;
 	}
 
-	static function get_grid_class( $tag ){
-		return $tag;
+	static function get_grid_class( $tag, $atts ){
+		extract( shortcode_atts( self::$default_atts, $atts) );
+		$classes = array( $tag );
+		if( $tag !== 'row' ){
+			foreach( array( 'lg', 'md', 'sm', 'xs' ) as $size ){
+				$var = $size . '_offset';
+				$offset_number = intval( $$var );
+
+				if( !empty( $offset_number ) ){
+					$classes[] = sprintf('col-%s-offset-%d', $size, $offset_number);
+				}
+			}
+		}
+		return implode(' ', $classes);
 	}
 
 }
