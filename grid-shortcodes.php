@@ -85,7 +85,7 @@ class Grid_Shortcodes {
 		extract( shortcode_atts( self::$default_atts, $atts) );
 
 		$grid_classes = self::get_grid_classes( $tag, $atts );
-		$content =  self::$autopfix . trim( $content );
+		$content =  self::$autopfix . $content;
 
 		if( !empty( $class ) ){
 			$grid_classes[] = $class;
