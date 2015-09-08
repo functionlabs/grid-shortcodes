@@ -84,22 +84,21 @@ class Grid_Shortcodes {
 	static function grid_shortcodes( $atts, $content, $tag ) {
 		extract( shortcode_atts( self::$default_atts, $atts) );
 
-		$grid_class = self::get_grid_class( $tag, $atts );
-		$content = self::$autopfix . trim( $content );
+		$grid_classes = self::get_grid_classes( $tag, $atts );
+		$content =  self::$autopfix . trim( $content );
 
-		$classes = array( $grid_class );
 		if( !empty( $class ) ){
-			$classes[] = $class;
+			$grid_classes[] = $class;
 		}
 
 		$inner = do_shortcode( $content );
 
-		$grid = sprintf( '<div class="%s" id="%s">%s</div>', esc_attr( implode(' ', $classes) ), esc_attr( $id ), $inner );
+		$grid = sprintf( '<div class="%s" id="%s">%s</div>', esc_attr( implode(' ', $grid_classes) ), esc_attr( $id ), $inner );
 
 		return $grid;
 	}
 
-	static function get_grid_class( $tag, $atts ){
+	static function get_grid_classes( $tag, $atts ){
 		extract( shortcode_atts( self::$default_atts, $atts) );
 		$classes = array( $tag );
 		if( $tag !== 'row' ){
@@ -112,7 +111,7 @@ class Grid_Shortcodes {
 				}
 			}
 		}
-		return implode(' ', $classes);
+		return $classes;
 	}
 
 }
