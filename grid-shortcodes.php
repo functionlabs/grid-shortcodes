@@ -1,10 +1,14 @@
 <?php
+/*
+Plugin Name: Grid Shortcodes
+Plugin URI:  https://github.com/functionlabs/grid-shortcodes
+Description: Provides WordPress shortcodes for Bootstrap 3 grid system
+Version:     1.1
+Author:      Function Labs
+Author URI:  http://functionlabs.io
+ */
 
 namespace FunctionLabs;
-
-/*
-	Plugin Name: Grid Shortcodes
-*/
 
 class Grid_Shortcodes {
 	/**
@@ -13,20 +17,20 @@ class Grid_Shortcodes {
 	 */
 	static $autopfix = '<p style="display:none;"><!-- autopfix --></p>';
 
-	static $default_atts = array(
+	static $default_atts = [
 		'id'    => '',
 		'class' => '',
 		'lg_offset' => '',
 		'md_offset' => '',
 		'sm_offset' => '',
 		'xs_offset' => ''
-	);
+	];
 
 	static function init() {
 		self::add_shortcodes();
 
-		add_filter( 'the_content', array( __CLASS__, 'do_grid_shortcodes' ), 7 );
-		add_filter( 'the_content', array( __CLASS__, 'cleanup' ), 999 );
+		add_filter( 'the_content', [ __CLASS__, 'do_grid_shortcodes' ], 7 );
+		add_filter( 'the_content', [ __CLASS__, 'cleanup' ], 999 );
 	}
 
 	/**
@@ -63,18 +67,18 @@ class Grid_Shortcodes {
 	}
 
 	private static function add_shortcodes() {
-		$tags = array(
+		$tags = [
 			'row'
-		);
+		];
 
-		foreach( array( 'lg', 'md', 'sm', 'xs' ) as $size ){
+		foreach( [ 'lg', 'md', 'sm', 'xs' ] as $size ){
 			for( $i=1; $i<=12; $i++ ){
 				$tags[] = sprintf( 'col-%s-%d', $size, $i );
 			}
 		}
 
 		foreach ( $tags as $tag ) {
-			add_shortcode( $tag, array( __CLASS__, 'grid_shortcodes' ) );
+			add_shortcode( $tag, [ __CLASS__, 'grid_shortcodes' ] );
 		}
 	}
 
@@ -93,16 +97,18 @@ class Grid_Shortcodes {
 
 		$inner = do_shortcode( $content );
 
-		$grid = sprintf( '<div class="%s" id="%s">%s</div>', esc_attr( implode(' ', $grid_classes) ), esc_attr( $id ), $inner );
+		$grid_container = sprintf( '<div class="%s" id="%s">%%s</div>', esc_attr( implode(' ', $grid_classes) ), esc_attr( $id ) );
+		// remove blank id and add inner content
+		$grid = sprintf( str_replace( 'id=""', '', $grid_container ), $inner );
 
 		return $grid;
 	}
 
 	static function get_grid_classes( $tag, $atts ){
 		extract( shortcode_atts( self::$default_atts, $atts) );
-		$classes = array( $tag );
+		$classes = [ $tag ];
 		if( $tag !== 'row' ){
-			foreach( array( 'lg', 'md', 'sm', 'xs' ) as $size ){
+			foreach( [ 'lg', 'md', 'sm', 'xs' ] as $size ){
 				$var = $size . '_offset';
 				$offset_number = intval( $$var );
 
@@ -116,4 +122,4 @@ class Grid_Shortcodes {
 
 }
 
-add_action( 'init', array( 'FunctionLabs\Grid_Shortcodes', 'init' )  );
+add_action( 'init', [ 'FunctionLabs\Grid_Shortcodes', 'init' ]  );
