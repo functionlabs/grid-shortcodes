@@ -3,7 +3,7 @@
 Plugin Name: Grid Shortcodes
 Plugin URI:  https://github.com/functionlabs/grid-shortcodes
 Description: Provides WordPress shortcodes for Bootstrap 3 grid system
-Version:     1.1
+Version:     1.0.4
 Author:      Function Labs
 Author URI:  http://functionlabs.io
  */
